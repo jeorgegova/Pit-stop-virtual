@@ -1,17 +1,16 @@
 import type { Metadata } from 'next'
-
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
 import { getPayload, type RequiredDataFromCollectionSlug } from 'payload'
 import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import { homeStatic } from '@/endpoints/seed/home-static'
-
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+import { ProductList } from '@/components/Front/ProductList' // Importa ProductList
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -75,6 +74,11 @@ export default async function Page({ params: paramsPromise }: Args) {
 
       <RenderHero {...hero} />
       <RenderBlocks blocks={layout} />
+      {/* Agrega la lista de productos */}
+      <div className="container mx-auto px-4 py-12">
+        <h2 className="text-3xl font-bold text-center mb-8">Nuestros Productos de Auto Partes</h2>
+        <ProductList />
+      </div>
     </article>
   )
 }
