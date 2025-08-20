@@ -747,6 +747,12 @@ export interface Product {
   price: number;
   image?: (number | null) | Media;
   category?: string | null;
+  compatibles?:
+    | {
+        vehicle: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1321,6 +1327,12 @@ export interface ProductsSelect<T extends boolean = true> {
   price?: T;
   image?: T;
   category?: T;
+  compatibles?:
+    | T
+    | {
+        vehicle?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

@@ -43,6 +43,21 @@ const Products: CollectionConfig = {
       label: 'Categoría',
       required: false,
     },
+    // Nuevo campo para automotores compatibles
+    {
+      name: 'compatibles', // Nombre del campo (úsalo en consultas y en el tipo Product)
+      type: 'array', // Tipo arreglo para múltiples valores
+      label: 'Automotores Compatibles',
+      fields: [
+        {
+          name: 'vehicle', // Nombre del subcampo (ej. "Toyota Corolla")
+          type: 'text',
+          label: 'Vehículo Compatible',
+          required: true,
+        },
+      ],
+      required: false, // Opcional, pero puedes hacerlo required si es necesario
+    },
   ],
 };
 

@@ -72,8 +72,8 @@ export default async function Page({ params: paramsPromise }: Args) {
 
       {draft && <LivePreviewListener />}
 
-      <RenderHero {...hero} />
-      <RenderBlocks blocks={layout} />
+{/*       <RenderHero {...hero} />
+      <RenderBlocks blocks={layout} /> */}
       {/* Agrega la lista de productos */}
       <div className="container mx-auto px-4 py-12">
         <h2 className="text-3xl font-bold text-center mb-8">Nuestros Productos de Auto Partes</h2>
