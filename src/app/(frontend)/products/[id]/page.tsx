@@ -6,18 +6,10 @@ import { notFound } from 'next/navigation';
 import { Product } from '@/payload-types';
 import BuyButton from '@/components/Front/BuyButton';
 
-// Importa el tipo de Next.js para páginas dinámicas
-import type { NextPage } from 'next';
-
-// Define el tipo de las props
-type ProductPageProps = {
-  params: { id: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
-};
-
-// Usa NextPage para tipar el componente
-const ProductDetailPage: NextPage<ProductPageProps> = async ({ params }) => {
-  const { id } = params; // Usa desestructuración directa
+// Define la página como async y usa el tipo correcto para params
+export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  // Usa await para resolver params
+  const { id } = await params;
   const payload = await getPayload({ config: configPromise });
 
   try {
@@ -104,7 +96,7 @@ const ProductDetailPage: NextPage<ProductPageProps> = async ({ params }) => {
 
             {/* Botón */}
             <div className="pt-4">
-              <BuyButton productId={id} /> {/* Corrige el productId */}
+              <BuyButton productId={id} />
             </div>
           </div>
         </div>
@@ -126,6 +118,17 @@ const ProductDetailPage: NextPage<ProductPageProps> = async ({ params }) => {
       </p>
     );
   }
-};
+}
 
-export default ProductDetailPage;
+// Generar rutas estáticas para SSG
+export async function generateStaticParams() {
+  const payload = await getPayload({ config: configPromise });
+  const products = await payload.find({
+    collection: 'products',
+    limit: 1000,
+  });
+
+  return products.docs.map((product: Product) => ({
+    id: String(product.id), // Convertir el ID a cadena
+  }));
+}
