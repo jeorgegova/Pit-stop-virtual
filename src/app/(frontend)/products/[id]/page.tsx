@@ -98,7 +98,7 @@ const ProductDetailPage = async ({ params }: ProductPageProps) => {
 
             {/* Botón */}
             <div className="pt-4">
-              <BuyButton />
+              <BuyButton productId='' />
             </div>
           </div>
         </div>
