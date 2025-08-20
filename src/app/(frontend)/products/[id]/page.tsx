@@ -1,18 +1,24 @@
-import React from 'react'
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
-import Image from 'next/image'
-import { notFound } from 'next/navigation'
-import { Product } from '@/payload-types'
-import BuyButton from '@/components/Front/BuyButton'
+import React from 'react';
+import configPromise from '@payload-config';
+import { getPayload } from 'payload';
+import Image from 'next/image';
+import { notFound } from 'next/navigation';
+import { Product } from '@/payload-types';
+import BuyButton from '@/components/Front/BuyButton';
 
-interface ProductPageProps {
-  params: { id: string }
-}
+// Importa el tipo de Next.js para páginas dinámicas
+import type { NextPage } from 'next';
 
-const ProductDetailPage = async ({ params }: ProductPageProps) => {
-  const id = params.id
-  const payload = await getPayload({ config: configPromise })
+// Define el tipo de las props
+type ProductPageProps = {
+  params: { id: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
+};
+
+// Usa NextPage para tipar el componente
+const ProductDetailPage: NextPage<ProductPageProps> = async ({ params }) => {
+  const { id } = params; // Usa desestructuración directa
+  const payload = await getPayload({ config: configPromise });
 
   try {
     const productQuery = await payload.findByID({
@@ -21,22 +27,22 @@ const ProductDetailPage = async ({ params }: ProductPageProps) => {
       depth: 2,
       draft: false,
       overrideAccess: false,
-    })
+    });
 
-    const product = productQuery as Product
+    const product = productQuery as Product;
 
     if (!product) {
-      notFound()
+      notFound();
     }
 
     const imageUrl =
-      typeof product.image === 'object' && product.image?.url ? product.image.url : null
+      typeof product.image === 'object' && product.image?.url ? product.image.url : null;
     const imageAlt =
       typeof product.image === 'object' && product.image?.alt
         ? product.image.alt
-        : product.name
+        : product.name;
 
-    const compatibles = product.compatibles || []
+    const compatibles = product.compatibles || [];
 
     return (
       <div className="container mx-auto px-4 py-12">
@@ -98,7 +104,7 @@ const ProductDetailPage = async ({ params }: ProductPageProps) => {
 
             {/* Botón */}
             <div className="pt-4">
-              <BuyButton productId='' />
+              <BuyButton productId={id} /> {/* Corrige el productId */}
             </div>
           </div>
         </div>
@@ -111,15 +117,15 @@ const ProductDetailPage = async ({ params }: ProductPageProps) => {
           </p>
         </div>
       </div>
-    )
+    );
   } catch (error) {
-    console.error('Error fetching product:', error)
+    console.error('Error fetching product:', error);
     return (
       <p className="text-center text-red-500 mt-20">
         Error al cargar el producto. Intenta nuevamente.
       </p>
-    )
+    );
   }
-}
+};
 
-export default ProductDetailPage
+export default ProductDetailPage;
